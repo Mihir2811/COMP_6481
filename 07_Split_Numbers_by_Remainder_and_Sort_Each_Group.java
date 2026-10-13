@@ -39,8 +39,14 @@ public class Split_Numbers_by_Remainder_and_Sort_Each_Group {
 	            // Finding the remainder
 	            int remainder = number % K;
 
-	            // Adding number to the remainder group
-	            groups.get(remainder).add(number);
+	            if(remainder<0) 
+	            {
+	            	remainder = remainder*(-1);
+	            	// Adding number to the remainder group
+	            	groups.get(remainder).add(number);
+	            }
+	            else
+	            	groups.get(remainder).add(number);
 	        }
 
 	        // Sort and print each group
