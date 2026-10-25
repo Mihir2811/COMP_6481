@@ -1,12 +1,12 @@
 // Assignment 2
-// Written by: (your name and student id)
+
+// Written by: Mihir Vipulbhai Panchal (ID:40366948)
 
 /*
- * MissionControlManager manages all active and completed mission tasks.
- * Active tasks are stored in an ArrayList.
- * Completed tasks are stored in a LinkedList with most recent first.
- * This class handles all operations like adding, updating, completing,
- * deleting, searching, cloning and summarizing mission tasks.
+ * This MissionControlManager class manages all the active and completed mission tasks.
+ * I will store all the active tasks in an ArrayList.
+ * All the Completed tasks will be stored in a LinkedList with most recent task as first.
+ * This class will handle operations of adding, updating, completing, deleting, searching, cloning and summarizing mission tasks.
  */
 
 import java.util.ArrayList;
@@ -17,49 +17,40 @@ import java.time.LocalDate;
 
 public class MissionControlManager {
 
-    // ArrayList for all current and upcoming tasks
+    // Using ArrayList for all current and upcoming tasks
     private ArrayList<MissionTask> activeTasks;
 
-    // LinkedList for completed tasks - most recent at front
+    // Using LinkedList for completed tasks and I will keep the most recent task at the front
     private LinkedList<MissionTask> completedTasks;
 
-    // Constructor - starts with empty lists
-    public MissionControlManager() {
+    // Empty Constructor which will initialize the arraylist and linkedlist
+    public MissionControlManager() 
+    {
         activeTasks = new ArrayList<>();
         completedTasks = new LinkedList<>();
     }
 
-    // -------------------------------------------------------
     // 1. addMissionTask
-    // Adds a new task to activeTasks after checking for duplicates
-    // -------------------------------------------------------
+    // This will adds a new task to activeTasks and validate by checking for duplicates
+    // Throws DuplicateMissionTaskException if task already exists.
 
-    /*
-     * Adds a mission task to the active list.
-     * Checks for duplicates using equals() from MissionTask.
-     * Throws DuplicateMissionTaskException if task already exists.
-     */
     public void addMissionTask(MissionTask task)
-    throws DuplicateMissionTaskException {
-
+    throws DuplicateMissionTaskException 
+    {
         // check every existing task for a duplicate
         for (MissionTask existing : activeTasks) {
-            if (existing.equals(task)) {
-                throw new DuplicateMissionTaskException(
-                    "Mission task [" + task.getTaskID() +
-                    "] already exists. Duplicate entries are not allowed.");
+            if (existing.equals(task)) 
+            {
+                throw new DuplicateMissionTaskException("Mission task [" + task.getTaskID() + "] already exists. Duplicate entries are not allowed.");
             }
         }
 
         activeTasks.add(task);
-        System.out.println("Mission task [" + task.getTaskID() +
-                           "] successfully added to the active mission list.");
+        System.out.println("Mission task [" + task.getTaskID() + "] successfully added to the active mission list.");
     }
 
-    // -------------------------------------------------------
     // 2. updateMissionTask
     // Finds task by ID and lets user modify its fields
-    // -------------------------------------------------------
 
     /*
      * Finds a mission task by ID in activeTasks and allows
