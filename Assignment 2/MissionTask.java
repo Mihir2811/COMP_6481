@@ -2,17 +2,15 @@
 // Written by: (your name and student id)
 
 /*
- * MissionTask represents a single mission operation in the
- * Artemis Lunar Mission Control System.
- * It implements MissionCritical to determine if the task
- * needs immediate attention based on its priority level.
+ * MissionTask will represent a single mission in the Artemis Lunar Mission Control System.
+ * It will inherit MissionCritical class to determine if the task needs immediate attention based on its priority level.
  */
 
 import java.util.ArrayList;
 
 public class MissionTask implements MissionCritical {
 
-    // All attributes are private - proper encapsulation
+    // private attributes
     private String taskID;
     private String taskName;
     private String category;
@@ -22,53 +20,64 @@ public class MissionTask implements MissionCritical {
     private boolean isCompleted;
     private ArrayList<String> requiredSystems;
     
+
+
     /*
-     * Parameterized constructor - takes all 8 values from user.
-     * Validates every field before storing it.
-     * Throws InvalidMissionTaskException if anything is wrong.
+     * Parameterized constructor which will takes all the 8 values from user.
+     * It will also validate every field before storing the result.
+     * It will also Throw an InvalidMissionTaskException if anything is wrong.
      */
+
     public MissionTask(String taskID, String taskName, String category,
                        int priority, String scheduledDate,
                        int estimatedDuration, boolean isCompleted,
                        ArrayList<String> requiredSystems)
-    throws InvalidMissionTaskException {
+    
+                       throws InvalidMissionTaskException {
 
-        // taskID cannot be null or empty
-        if (taskID == null || taskID.trim().isEmpty()) {
-            throw new InvalidMissionTaskException("Error: Task ID cannot be empty.");
+        // the taskid cannot be null or empty
+        if (taskID == null || taskID.trim().isEmpty()) 
+        {
+            throw new InvalidMissionTaskException("Error Task ID cannot be empty.");
         }
 
         // taskName cannot be null or empty
-        if (taskName == null || taskName.trim().isEmpty()) {
-            throw new InvalidMissionTaskException("Error: Task name cannot be empty.");
+        if (taskName == null || taskName.trim().isEmpty()) 
+        {
+            throw new InvalidMissionTaskException("Error task name cannot be empty.");
         }
 
         // category cannot be null or empty
-        if (category == null || category.trim().isEmpty()) {
-            throw new InvalidMissionTaskException("Error: Category cannot be empty.");
+        if (category == null || category.trim().isEmpty()) 
+        {
+            throw new InvalidMissionTaskException("Error category cannot be empty.");
         }
 
         // priority must be between 1 and 10
-        if (priority < 1 || priority > 10) {
-            throw new InvalidMissionTaskException("Error: Priority must be between 1 and 10.");
+        if (priority < 1 || priority > 10) 
+        {
+            throw new InvalidMissionTaskException("Error priority must be between 1 and 10.");
         }
 
         // scheduledDate cannot be null or empty
-        if (scheduledDate == null || scheduledDate.trim().isEmpty()) {
-            throw new InvalidMissionTaskException("Error: Scheduled date cannot be empty.");
+        if (scheduledDate == null || scheduledDate.trim().isEmpty()) 
+        {
+            throw new InvalidMissionTaskException("Error scheduled date cannot be empty.");
         }
 
         // duration must be positive
-        if (estimatedDuration <= 0) {
-            throw new InvalidMissionTaskException("Error: Estimated duration must be greater than zero.");
+        if (estimatedDuration <= 0) 
+        {
+            throw new InvalidMissionTaskException("Error estimated duration must be greater than 0.");
         }
 
         // requiredSystems cannot be null
-        if (requiredSystems == null) {
-            throw new InvalidMissionTaskException("Error: Required systems list cannot be null.");
+        if (requiredSystems == null) 
+        {
+            throw new InvalidMissionTaskException("Error required systems list cannot be null.");
         }
 
-        // all valid - store the values
+        // storing the values
         this.taskID = taskID;
         this.taskName = taskName;
         this.category = category;
@@ -77,25 +86,28 @@ public class MissionTask implements MissionCritical {
         this.estimatedDuration = estimatedDuration;
         this.isCompleted = isCompleted;
 
-        // Deep copy the systems list so outside changes don't affect this object
+        // deep copy to the system list
         this.requiredSystems = new ArrayList<>(requiredSystems);
     }
     
+
+
     /*
-     * Copy constructor - creates a new MissionTask based on an existing one
-     * but assigns it a brand new unique task ID.
+     * This is a copy constructor which will create a new MissionTask based on an existing one but assigns it a brand new unique task ID
      * The requiredSystems list is deep copied so both objects are independent.
      */
+
     public MissionTask(MissionTask original, String newTaskID)
+    
     throws InvalidMissionTaskException {
 
-        // validate the new ID
-        if (newTaskID == null || newTaskID.trim().isEmpty()) {
-            throw new InvalidMissionTaskException("Error: New Task ID cannot be empty.");
+        if (newTaskID == null || newTaskID.trim().isEmpty()) 
+        {
+            throw new InvalidMissionTaskException("Error New Task ID cannot be empty.");
         }
 
-        // copy all fields from original
-        this.taskID = newTaskID;               // new ID given by user
+        // copying all fields from original
+        this.taskID = newTaskID;
         this.taskName = original.taskName;
         this.category = original.category;
         this.priority = original.priority;
@@ -103,22 +115,26 @@ public class MissionTask implements MissionCritical {
         this.estimatedDuration = original.estimatedDuration;
         this.isCompleted = original.isCompleted;
 
-        // Deep copy the list - not just copying the reference
+        // Deep copy the list
         this.requiredSystems = new ArrayList<>(original.requiredSystems);
     }
     
+
+
     /*
-     * clone() creates and returns a deep copy of this MissionTask.
-     * The cloned object has its own independent requiredSystems list.
+     * clone method will create and return a deep copy of the MissionTask.
+     * The cloned object will have its own independent requiredSystems list.
      * A new task ID will be requested separately before adding to the system.
      */
+
     public MissionTask clone() {
 
-        // create a new empty systems list
+        // new empty systems list
         ArrayList<String> systemsCopy = new ArrayList<>(this.requiredSystems);
 
-        // try to build a new MissionTask with same values
-        try {
+        // new mission same values
+        try 
+        {
             return new MissionTask(
                 this.taskID,
                 this.taskName,
@@ -129,45 +145,49 @@ public class MissionTask implements MissionCritical {
                 this.isCompleted,
                 systemsCopy
             );
-        } catch (InvalidMissionTaskException e) {
-            // this should never happen since we are copying valid data
-            System.out.println("Clone failed: " + e.getMessage());
+
+        } 
+        
+        catch (InvalidMissionTaskException e) 
+        {
+            System.out.println("Cloning mission task failed");
             return null;
         }
     }
     
-    /*
-     * Implements isCritical() from MissionCritical interface.
-     * Returns true if priority is 8, 9, or 10.
-     * These tasks need immediate attention.
-     */
-    public boolean isCritical() {
+
+     // Implements isCritical() from MissionCritical interface.
+     // Returns true if priority is 8 9 or 10
+
+    public boolean isCritical() 
+    {
         return priority >= 8 && priority <= 10;
     }
     
+
+
     /*
-     * Overrides equals() from Object class.
-     * Two mission tasks are equal if all fields match except taskID.
-     * This is used to detect duplicate tasks in the system.
+     * Two mission tasks are equal if all fields match except taskID (overridding situation).
      */
+
     public boolean equals(Object obj) {
 
-        // same object in memory
-        if (this == obj) {
+        if (this == obj) 
+        {
             return true;
         }
 
-        // null check
-        if (obj == null) {
+        if (obj == null) 
+        {
             return false;
         }
 
-        // must be a MissionTask
-        if (!(obj instanceof MissionTask)) {
+        if (!(obj instanceof MissionTask)) 
+        {
             return false;
         }
 
-        // cast and compare all fields except taskID
+        // casting and comparing all fields except taskID
         MissionTask other = (MissionTask) obj;
 
         return this.taskName.equalsIgnoreCase(other.taskName) &&
@@ -179,11 +199,12 @@ public class MissionTask implements MissionCritical {
                this.requiredSystems.equals(other.requiredSystems);
     }
     
-    /*
-     * toString() displays all mission task information clearly.
-     * Called automatically when you do System.out.println(task)
-     */
-    public String toString() {
+    
+
+    // custom tostring method
+    
+    public String toString() 
+    {
         return "Task ID: " + taskID + "\n" +
                "Task Name: " + taskName + "\n" +
                "Category: " + category + "\n" +
@@ -195,82 +216,106 @@ public class MissionTask implements MissionCritical {
                "Mission Critical: " + isCritical();
     }
     
-    // -------------------------
-    // Getters
-    // -------------------------
 
-    public String getTaskID() {
+
+    // Getters Methods
+
+    public String getTaskID() 
+    {
         return taskID;
     }
 
-    public String getTaskName() {
+    public String getTaskName() 
+    {
         return taskName;
     }
 
-    public String getCategory() {
+    public String getCategory() 
+    {
         return category;
     }
 
-    public int getPriority() {
+    public int getPriority() 
+    {
         return priority;
     }
 
-    public String getScheduledDate() {
+    public String getScheduledDate() 
+    {
         return scheduledDate;
     }
 
-    public int getEstimatedDuration() {
+    public int getEstimatedDuration() 
+    {
         return estimatedDuration;
     }
 
-    public boolean isCompleted() {
+    public boolean isCompleted() 
+    {
         return isCompleted;
     }
 
-    public ArrayList<String> getRequiredSystems() {
-        // return deep copy so outside code cannot modify internal list
+    // deep copy
+    public ArrayList<String> getRequiredSystems() 
+    {
         return new ArrayList<>(requiredSystems);
     }
 
-    // -------------------------
-    // Setters - no setter for taskID as it must stay unique
-    // -------------------------
 
-    public void setTaskName(String taskName) {
+
+    // Setters
+    // except taskID
+
+    public void setTaskName(String taskName) 
+    {
         this.taskName = taskName;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String category) 
+    {
         this.category = category;
     }
 
-    public void setPriority(int priority) {
-        if (priority >= 1 && priority <= 10) {
+    public void setPriority(int priority) 
+    {
+        if (priority >= 1 && priority <= 10) 
+        {
             this.priority = priority;
-        } else {
-            System.out.println("Priority must be between 1 and 10.");
+        } 
+
+        else 
+        {
+            System.out.println("Priority must be between 1 and 10");
         }
     }
 
-    public void setScheduledDate(String scheduledDate) {
+    public void setScheduledDate(String scheduledDate) 
+    {
         this.scheduledDate = scheduledDate;
     }
 
-    public void setEstimatedDuration(int estimatedDuration) {
-        if (estimatedDuration > 0) {
+    public void setEstimatedDuration(int estimatedDuration) 
+    {
+        if (estimatedDuration > 0) 
+        {
             this.estimatedDuration = estimatedDuration;
-        } else {
-            System.out.println("Duration must be greater than zero.");
+        } 
+        
+        else 
+        {
+            System.out.println("Duration must be greater than 0");
         }
     }
 
-    public void setCompleted(boolean isCompleted) {
+    public void setCompleted(boolean isCompleted) 
+    {
         this.isCompleted = isCompleted;
     }
 
-    public void setRequiredSystems(ArrayList<String> requiredSystems) {
-        // deep copy incoming list
+    // deep copy
+    public void setRequiredSystems(ArrayList<String> requiredSystems) 
+    {
         this.requiredSystems = new ArrayList<>(requiredSystems);
     }
 
-} // end of MissionTask class
+}
