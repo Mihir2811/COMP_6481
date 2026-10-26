@@ -35,18 +35,19 @@ public class MissionControlManager {
     // Throws DuplicateMissionTaskException if task already exists.
 
     public void addMissionTask(MissionTask task)
-    throws DuplicateMissionTaskException 
-    {
-        // check every existing task for a duplicate
-        for (MissionTask existing : activeTasks) {
-            if (existing.equals(task)) 
+    throws DuplicateMissionTaskException {
+
+        for (MissionTask existing : activeTasks) 
+        {
+            if (existing.getTaskID().equalsIgnoreCase(task.getTaskID())) 
             {
-                throw new DuplicateMissionTaskException("Mission task [" + task.getTaskID() + "] already exists. Duplicate entries are not allowed.");
+                throw new DuplicateMissionTaskException("Mission task [" + task.getTaskID() + "] already exists Duplicate entries are not allowed");
             }
         }
 
         activeTasks.add(task);
-        System.out.println("Mission task [" + task.getTaskID() + "] successfully added to the active mission list.");
+
+        System.out.println("Mission task [" + task.getTaskID() + "] successfully added to the active mission list");
     }
 
     // 2. updateMissionTask
