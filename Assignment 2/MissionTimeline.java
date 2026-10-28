@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 public class MissionTimeline {
 
-    // This will be the Inner Class
+    // the Inner Class
 
     public class MissionTaskNode {
 
@@ -19,7 +19,7 @@ public class MissionTimeline {
         private MissionTaskNode next;
 
 
-        // Default empty constructor
+        // Default constructor
         public MissionTaskNode() 
         {
             this.task = null;
@@ -33,7 +33,6 @@ public class MissionTimeline {
             this.task = task;
             this.next = null;
         }
-
 
 
         // Copy constructor 
@@ -54,7 +53,6 @@ public class MissionTimeline {
         }
 
 
-
         // clone method
         public MissionTaskNode clone() 
         {
@@ -62,8 +60,7 @@ public class MissionTimeline {
         }
 
 
-
-        // Getters methods
+        // Getter methods
         public MissionTask getTask() 
         {
             return task;
@@ -75,8 +72,7 @@ public class MissionTimeline {
         }
 
 
-
-        // Setters methods
+        // Setter methods
         public void setTask(MissionTask task) 
         {
             this.task = task;
@@ -92,7 +88,6 @@ public class MissionTimeline {
     // end of inner class
 
 
-
     // MissionTimeline attributes
     private MissionTaskNode head;  
     private int size;          
@@ -104,7 +99,6 @@ public class MissionTimeline {
         this.size = 0;
     }
     
-
     
     // Adds a mission task to the beginning of the timeline.
     public void addToStart(MissionTask task) 
@@ -113,14 +107,13 @@ public class MissionTimeline {
 
         newNode.setNext(head);
         head = newNode;
-        size++;
+        size = size + 1;
 
-        System.out.println("Mission task " + task.getTaskID() + " is added to the start of the timeline.");
+        System.out.println("Mission task " + task.getTaskID() + " is added to the start of the timeline");
     }
     
 
-
-    // Inserts a mission task at the specified index.
+    // Inserts a mission task at the specified index
     public void insertAtIndex(MissionTask task, int index) 
     {
         if (index < 0 || index > size) 
@@ -154,7 +147,6 @@ public class MissionTimeline {
     
 
 
-
     // Removes the first mission task from the timeline.
      
     public void deleteFromStart() 
@@ -172,7 +164,6 @@ public class MissionTimeline {
         size = size - 1;
     }
     
-
 
 
      //Deletes the mission task at the specified index
@@ -209,7 +200,6 @@ public class MissionTimeline {
     
 
 
-
     // Replaces the mission task at the specified index
     public void replaceAtIndex(MissionTask task, int index) 
     {
@@ -226,11 +216,9 @@ public class MissionTimeline {
         }
 
         System.out.println("Replacing task " + current.getTask().getTaskID() + " at index " + index + " with " + task.getTaskID());
-
         current.setTask(task);
     }
     
-
 
 
     /*
@@ -239,6 +227,7 @@ public class MissionTimeline {
      * Returns a deep copy of the found task.
      * Displays how many iterations were needed.
      */
+
     public MissionTask find(String taskID) {
 
         MissionTaskNode current = head;
@@ -246,12 +235,11 @@ public class MissionTimeline {
 
         while (current != null) 
         {
-            iterations++;
+            iterations = iterations + 1;
 
             if (current.getTask().getTaskID().equalsIgnoreCase(taskID)) 
             {
                 System.out.println("Mission task " + taskID + " found after " + iterations + " iterations");
-                // deep copy 
                 return current.getTask().clone();
             }
 

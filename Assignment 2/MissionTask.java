@@ -29,53 +29,43 @@ public class MissionTask implements MissionCritical {
      * It will also Throw an InvalidMissionTaskException if anything is wrong.
      */
 
-    public MissionTask(String taskID, String taskName, String category,
-                       int priority, String scheduledDate,
-                       int estimatedDuration, boolean isCompleted,
-                       ArrayList<String> requiredSystems)
-    
+    public MissionTask(String taskID, String taskName, String category, int priority, String scheduledDate,
+                       int estimatedDuration, boolean isCompleted, ArrayList<String> requiredSystems)
                        throws InvalidMissionTaskException {
 
-        // the taskid cannot be null or empty
         if (taskID == null || taskID.trim().isEmpty()) 
         {
-            throw new InvalidMissionTaskException("Error Task ID cannot be empty.");
+            throw new InvalidMissionTaskException("Error Task ID cannot be empty");
         }
 
-        // taskName cannot be null or empty
         if (taskName == null || taskName.trim().isEmpty()) 
         {
-            throw new InvalidMissionTaskException("Error task name cannot be empty.");
+            throw new InvalidMissionTaskException("Error task name cannot be empty");
         }
 
-        // category cannot be null or empty
         if (category == null || category.trim().isEmpty()) 
         {
-            throw new InvalidMissionTaskException("Error category cannot be empty.");
+            throw new InvalidMissionTaskException("Error category cannot be empty");
         }
 
-        // priority must be between 1 and 10
         if (priority < 1 || priority > 10) 
         {
-            throw new InvalidMissionTaskException("Error priority must be between 1 and 10.");
+            throw new InvalidMissionTaskException("Error priority must be between 1 and 10");
         }
 
-        // scheduledDate cannot be null or empty
         if (scheduledDate == null || scheduledDate.trim().isEmpty()) 
         {
-            throw new InvalidMissionTaskException("Error scheduled date cannot be empty.");
+            throw new InvalidMissionTaskException("Error scheduled date cannot be empty");
         }
 
-        // duration must be positive
         if (estimatedDuration <= 0) 
         {
-            throw new InvalidMissionTaskException("Error estimated duration must be greater than 0.");
+            throw new InvalidMissionTaskException("Error estimated duration must be greater than 0");
         }
 
-        // requiredSystems cannot be null
         if (requiredSystems == null) 
         {
-            throw new InvalidMissionTaskException("Error required systems list cannot be null.");
+            throw new InvalidMissionTaskException("Error required systems list cannot be null");
         }
 
         // storing the values
@@ -92,7 +82,6 @@ public class MissionTask implements MissionCritical {
     }
     
 
-
     /*
      * This is a copy constructor which will create a new MissionTask based on an existing one but assigns it a brand new unique task ID
      * The requiredSystems list is deep copied so both objects are independent.
@@ -104,7 +93,7 @@ public class MissionTask implements MissionCritical {
 
         if (newTaskID == null || newTaskID.trim().isEmpty()) 
         {
-            throw new InvalidMissionTaskException("Error New Task ID cannot be empty.");
+            throw new InvalidMissionTaskException("Error New Task ID cannot be empty");
         }
 
         // copying all fields from original
@@ -121,7 +110,6 @@ public class MissionTask implements MissionCritical {
     }
     
 
-
     /*
      * clone method will create and return a deep copy of the MissionTask.
      * The cloned object will have its own independent requiredSystems list.
@@ -130,10 +118,8 @@ public class MissionTask implements MissionCritical {
 
     public MissionTask clone() {
 
-        // new empty systems list
         ArrayList<String> systemsCopy = new ArrayList<>(this.requiredSystems);
 
-        // new mission same values
         try 
         {
             return new MissionTask(
@@ -157,7 +143,7 @@ public class MissionTask implements MissionCritical {
     }
     
 
-     // Implements isCritical() from MissionCritical interface.
+     // Implements isCritical method from MissionCritical interface.
      // Returns true if priority is 8 9 or 10
 
     public boolean isCritical() 
@@ -166,10 +152,10 @@ public class MissionTask implements MissionCritical {
     }
     
 
-
     /*
      * Two mission tasks are equal if all fields match except taskID (overridding situation).
      */
+
 
     public boolean equals(Object obj) {
 
@@ -219,7 +205,7 @@ public class MissionTask implements MissionCritical {
     
 
 
-    // Getters Methods
+    // Getter Methods
 
     public String getTaskID() 
     {
@@ -264,7 +250,7 @@ public class MissionTask implements MissionCritical {
 
 
 
-    // Setters
+    // Setters methods
     // except taskID
 
     public void setTaskName(String taskName) 
