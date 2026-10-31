@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+<head>
+<meta charset="utf-8">
+<title>Artemis Mission Control System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0c0c">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/govuk-frontend@5.9.0/dist/govuk/govuk-frontend.min.css">
+<style>
+/* some extra styles for the task cards */
+.mission-panel { margin-bottom: 30px; }
+.task-card {
+  border-left: 5px solid #1d70b8;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  background: #f3f2f1;
+}
+.task-card.critical { border-left-color: #d4351c; }
+.task-card.completed { border-left-color: #00703c; }
+.task-card.overdue { border-left-color: #f47738; }
+.hidden { display: none !important; }
+#notification-area { margin-bottom: 20px; }
+.timeline-node {
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border: 1px solid #b1b4b6;
+  border-left: 4px solid #1d70b8;
+}
+</style>
+</head>
+<body class="govuk-template__body">
+<script>
+document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
+</script>
+
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+<header class="govuk-header" role="banner" data-module="govuk-header">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="govuk-header__content">
+      <span class="govuk-header__link govuk-header__service-name" style="margin-left:0">
+        Artemis Lunar Mission Control
+      </span>
+    </div>
+  </div>
+</header>
+
+<div class="govuk-width-container">
+  <div class="govuk-phase-banner">
+    <p class="govuk-phase-banner__content">
+      <strong class="govuk-tag govuk-phase-banner__content__tag">Alpha</strong>
+      <span class="govuk-phase-banner__text">
+        Student assignment prototype – Artemis Mission Control System.
+      </span>
+    </p>
+  </div>
+
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+
+        <h1 class="govuk-heading-xl">Artemis Mission Control System</h1>
+        <p class="govuk-body-l">Manage lunar mission tasks, priorities and timelines.</p>
+        <p class="govuk-body">Developed by: Mihir Vipulbhai Panchal (ID: 40366948)</p>
+
+        <div id="notification-area"></div>
+
+        <!-- menu links -->
+        <nav class="govuk-!-margin-bottom-6" aria-label="Mission actions">
+          <ul class="govuk-list govuk-list--bullet">
+            <li><a class="govuk-link" href="#section-add">1. Add Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-update">2. Update Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-complete">3. Complete Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-delete">4. Delete Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-active">5. View Active Tasks</a></li>
+            <li><a class="govuk-link" href="#section-completed">6. View Completed Tasks</a></li>
+            <li><a class="govuk-link" href="#section-critical">7. View Critical Tasks</a></li>
+            <li><a class="govuk-link" href="#section-top3">8. View Top 3 Tasks</a></li>
+            <li><a class="govuk-link" href="#section-overdue">9. View Overdue Tasks</a></li>
+            <li><a class="govuk-link" href="#section-clone">10. Clone Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-search">11. Search Mission Task</a></li>
+            <li><a class="govuk-link" href="#section-summary">12. Generate Mission Summary</a></li>
+            <li><a class="govuk-link" href="#section-timeline">13. Test Mission Timeline</a></li>
+          </ul>
+        </nav>
+
+        <!-- 1 add task -->
+        <section id="section-add" class="mission-panel">
+          <h2 class="govuk-heading-l">1. Add Mission Task</h2>
+          <form id="form-add" class="govuk-form-group">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-taskID">Task ID</label>
+              <div class="govuk-hint">Unique identifier, e.g. NAV-101</div>
+              <input class="govuk-input govuk-input--width-10" id="add-taskID" name="taskID" type="text" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-taskName">Task Name</label>
+              <input class="govuk-input" id="add-taskName" name="taskName" type="text" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-category">Category</label>
+              <input class="govuk-input govuk-input--width-20" id="add-category" name="category" type="text" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-priority">Priority (1–10)</label>
+              <input class="govuk-input govuk-input--width-4" id="add-priority" name="priority" type="number" min="1" max="10" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-date">Scheduled Date</label>
+              <div class="govuk-hint">Format: YYYY-MM-DD</div>
+              <input class="govuk-input govuk-input--width-10" id="add-date" name="scheduledDate" type="text" placeholder="2027-05-15" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-duration">Estimated Duration (minutes)</label>
+              <input class="govuk-input govuk-input--width-5" id="add-duration" name="duration" type="number" min="1" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="add-systems">Required Systems</label>
+              <div class="govuk-hint">Comma-separated list, e.g. Navigation Computer, Orion Guidance System</div>
+              <input class="govuk-input" id="add-systems" name="systems" type="text">
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Add Mission Task</button>
+          </form>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 2 update -->
+        <section id="section-update" class="mission-panel">
+          <h2 class="govuk-heading-l">2. Update Mission Task</h2>
+          <form id="form-update">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-taskID">Task ID to update</label>
+              <input class="govuk-input govuk-input--width-10" id="update-taskID" type="text" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-taskName">New Task Name (leave blank to keep)</label>
+              <input class="govuk-input" id="update-taskName" type="text">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-category">New Category</label>
+              <input class="govuk-input govuk-input--width-20" id="update-category" type="text">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-priority">New Priority (1–10)</label>
+              <input class="govuk-input govuk-input--width-4" id="update-priority" type="number" min="1" max="10">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-date">New Scheduled Date</label>
+              <input class="govuk-input govuk-input--width-10" id="update-date" type="text" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-duration">New Duration (minutes)</label>
+              <input class="govuk-input govuk-input--width-5" id="update-duration" type="number" min="1">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="update-systems">New Required Systems (comma-separated)</label>
+              <input class="govuk-input" id="update-systems" type="text">
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Update Task</button>
+          </form>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 3 complete -->
+        <section id="section-complete" class="mission-panel">
+          <h2 class="govuk-heading-l">3. Complete Mission Task</h2>
+          <form id="form-complete">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="complete-taskID">Task ID to mark complete</label>
+              <input class="govuk-input govuk-input--width-10" id="complete-taskID" type="text" required>
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Mark as Complete</button>
+          </form>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 4 delete -->
+        <section id="section-delete" class="mission-panel">
+          <h2 class="govuk-heading-l">4. Delete Mission Task</h2>
+          <form id="form-delete">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="delete-taskID">Task ID to delete</label>
+              <input class="govuk-input govuk-input--width-10" id="delete-taskID" type="text" required>
+            </div>
+            <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">Delete Task</button>
+          </form>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 5 active tasks -->
+        <section id="section-active" class="mission-panel">
+          <h2 class="govuk-heading-l">5. Active Mission Tasks</h2>
+          <button type="button" class="govuk-button govuk-button--secondary" id="btn-refresh-active" data-module="govuk-button">Refresh list</button>
+          <div id="active-tasks-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 6 completed -->
+        <section id="section-completed" class="mission-panel">
+          <h2 class="govuk-heading-l">6. Completed Mission Tasks</h2>
+          <p class="govuk-hint">Most recently completed shown first</p>
+          <button type="button" class="govuk-button govuk-button--secondary" id="btn-refresh-completed" data-module="govuk-button">Refresh list</button>
+          <div id="completed-tasks-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 7 critical -->
+        <section id="section-critical" class="mission-panel">
+          <h2 class="govuk-heading-l">7. Critical Mission Tasks</h2>
+          <p class="govuk-body">Priority 8–10 (Mission Critical)</p>
+          <button type="button" class="govuk-button govuk-button--secondary" id="btn-show-critical" data-module="govuk-button">Show Critical Tasks</button>
+          <div id="critical-tasks-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 8 top 3 -->
+        <section id="section-top3" class="mission-panel">
+          <h2 class="govuk-heading-l">8. Top 3 Mission Tasks</h2>
+          <button type="button" class="govuk-button govuk-button--secondary" id="btn-show-top3" data-module="govuk-button">Show Top 3 by Priority</button>
+          <div id="top3-tasks-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 9 overdue -->
+        <section id="section-overdue" class="mission-panel">
+          <h2 class="govuk-heading-l">9. Overdue Mission Tasks</h2>
+          <button type="button" class="govuk-button govuk-button--secondary" id="btn-show-overdue" data-module="govuk-button">Show Overdue Tasks</button>
+          <div id="overdue-tasks-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 10 clone -->
+        <section id="section-clone" class="mission-panel">
+          <h2 class="govuk-heading-l">10. Clone Mission Task</h2>
+          <form id="form-clone">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="clone-sourceID">Source Task ID</label>
+              <input class="govuk-input govuk-input--width-10" id="clone-sourceID" type="text" required>
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="clone-newID">New unique Task ID for clone</label>
+              <input class="govuk-input govuk-input--width-10" id="clone-newID" type="text" required>
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Clone Task</button>
+          </form>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 11 search -->
+        <section id="section-search" class="mission-panel">
+          <h2 class="govuk-heading-l">11. Search Mission Task</h2>
+          <form id="form-search">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="search-taskID">Task ID</label>
+              <input class="govuk-input govuk-input--width-10" id="search-taskID" type="text" required>
+            </div>
+            <button type="submit" class="govuk-button" data-module="govuk-button">Search</button>
+          </form>
+          <div id="search-result-container"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 12 summary -->
+        <section id="section-summary" class="mission-panel">
+          <h2 class="govuk-heading-l">12. Mission Summary</h2>
+          <button type="button" class="govuk-button" id="btn-summary" data-module="govuk-button">Generate Summary</button>
+          <div id="summary-container" class="govuk-!-margin-top-4"></div>
+        </section>
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!-- 13 timeline test -->
+        <section id="section-timeline" class="mission-panel">
+          <h2 class="govuk-heading-l">13. Mission Timeline (Custom Linked List)</h2>
+          <p class="govuk-body">Demonstrates the custom linked-list operations from the Java MissionTimeline class.</p>
+
+          <div class="govuk-button-group">
+            <button type="button" class="govuk-button" id="btn-timeline-demo" data-module="govuk-button">Run Full Timeline Demo</button>
+            <button type="button" class="govuk-button govuk-button--secondary" id="btn-timeline-clear" data-module="govuk-button">Clear Timeline</button>
+          </div>
+
+          <div id="timeline-log" class="govuk-!-margin-top-4"></div>
+          <div id="timeline-display" class="govuk-!-margin-top-4"></div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="govuk-footer" role="contentinfo">
+  <div class="govuk-width-container">
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <div class="govuk-footer__meta-custom">
+          Artemis Mission Control System — student assignment by Mihir Vipulbhai Panchal (ID: 40366948)
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/govuk-frontend@5.9.0/dist/govuk/govuk-frontend.min.js"></script>
+<script type="module">
+import { initAll } from 'https://cdn.jsdelivr.net/npm/govuk-frontend@5.9.0/dist/govuk/govuk-frontend.min.js';
+initAll();
+</script>
+
+<script>
+// MissionTask class - same as the java one basically
+class MissionTask {
+  constructor(taskID, taskName, category, priority, scheduledDate, estimatedDuration, isCompleted, requiredSystems) {
+    // validation like in the java constructor
+    if (!taskID || !taskID.trim()) {
+      throw new Error("Task ID cannot be empty.");
+    }
+    if (!taskName || !taskName.trim()) {
+      throw new Error("Task name cannot be empty.");
+    }
+    if (!category || !category.trim()) {
+      throw new Error("Category cannot be empty.");
+    }
+    if (priority < 1 || priority > 10) {
+      throw new Error("Priority must be between 1 and 10.");
+    }
+    if (!scheduledDate || !scheduledDate.trim()) {
+      throw new Error("Scheduled date cannot be empty.");
+    }
+    if (estimatedDuration <= 0) {
+      throw new Error("Estimated duration must be greater than 0.");
+    }
+    if (!requiredSystems) {
+      throw new Error("Required systems list cannot be null.");
+    }
+
+    this.taskID = taskID.trim();
+    this.taskName = taskName.trim();
+    this.category = category.trim();
+    this.priority = priority;
+    this.scheduledDate = scheduledDate.trim();
+    this.estimatedDuration = estimatedDuration;
+    this.isCompleted = !!isCompleted;
+    // deep copy the systems list
+    this.requiredSystems = [...requiredSystems];
+  }
+
+  // from MissionCritical interface
+  isCritical() {
+    return this.priority >= 8 && this.priority <= 10;
+  }
+
+  clone() {
+    return new MissionTask(
+      this.taskID,
+      this.taskName,
+      this.category,
+      this.priority,
+      this.scheduledDate,
+      this.estimatedDuration,
+      this.isCompleted,
+      [...this.requiredSystems]
+    );
+  }
+
+  // equals ignores taskID like in the java version
+  equals(other) {
+    if (!other) return false;
+    return this.taskName.toLowerCase() === other.taskName.toLowerCase() &&
+           this.category.toLowerCase() === other.category.toLowerCase() &&
+           this.priority === other.priority &&
+           this.scheduledDate === other.scheduledDate &&
+           this.estimatedDuration === other.estimatedDuration &&
+           this.isCompleted === other.isCompleted &&
+           JSON.stringify(this.requiredSystems) === JSON.stringify(other.requiredSystems);
+  }
+
+  // for displaying on the page
+  toHTML() {
+    var criticalClass = this.isCritical() ? ' critical' : '';
+    var completedClass = this.isCompleted ? ' completed' : '';
+    return '<div class="task-card' + criticalClass + completedClass + '">' +
+      '<p class="govuk-body"><strong>Task ID:</strong> ' + escapeHtml(this.taskID) + '</p>' +
+      '<p class="govuk-body"><strong>Task Name:</strong> ' + escapeHtml(this.taskName) + '</p>' +
+      '<p class="govuk-body"><strong>Category:</strong> ' + escapeHtml(this.category) + '</p>' +
+      '<p class="govuk-body"><strong>Priority:</strong> ' + this.priority +
+        (this.isCritical() ? ' <strong class="govuk-tag govuk-tag--red">CRITICAL</strong>' : '') +
+      '</p>' +
+      '<p class="govuk-body"><strong>Scheduled Date:</strong> ' + escapeHtml(this.scheduledDate) + '</p>' +
+      '<p class="govuk-body"><strong>Estimated Duration:</strong> ' + this.estimatedDuration + ' minutes</p>' +
+      '<p class="govuk-body"><strong>Completed:</strong> ' + (this.isCompleted ? 'Yes' : 'No') + '</p>' +
+      '<p class="govuk-body"><strong>Required Systems:</strong> ' + escapeHtml(this.requiredSystems.join(', ') || 'None') + '</p>' +
+      '</div>';
+  }
+}
+
+// node for the linked list
+class MissionTaskNode {
+  constructor(task) {
+    this.task = task;
+    this.next = null;
+  }
+}
+
+// custom linked list - MissionTimeline
+class MissionTimeline {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
+
+  addToStart(task) {
+    var node = new MissionTaskNode(task);
+    node.next = this.head;
+    this.head = node;
+    this.size++;
+    return "Mission task " + task.taskID + " added to the start of the timeline.";
+  }
+
+  insertAtIndex(task, index) {
+    if (index < 0 || index > this.size) {
+      throw new Error("Invalid index " + index + ". Timeline size is " + this.size);
+    }
+    if (index == 0) {
+      return this.addToStart(task);
+    }
+
+    var node = new MissionTaskNode(task);
+    var current = this.head;
+    for (var i = 0; i < index - 1; i++) {
+      current = current.next;
+    }
+    node.next = current.next;
+    current.next = node;
+    this.size++;
+    return "Mission task " + task.taskID + " inserted at index " + index + ".";
+  }
+
+  deleteFromStart() {
+    if (!this.head) {
+      return "Timeline is empty.";
+    }
+    var id = this.head.task.taskID;
+    this.head = this.head.next;
+    this.size--;
+    return "Removed task " + id + " from the start of the timeline.";
+  }
+
+  deleteFromIndex(index) {
+    if (index < 0 || index >= this.size) {
+      throw new Error("Invalid index " + index + ". Timeline size is " + this.size);
+    }
+    if (index == 0) {
+      return this.deleteFromStart();
+    }
+
+    var current = this.head;
+    for (var i = 0; i < index - 1; i++) {
+      current = current.next;
+    }
+    var id = current.next.task.taskID;
+    current.next = current.next.next;
+    this.size--;
+    return "Removed task " + id + " from index " + index + ".";
+  }
+
+  replaceAtIndex(task, index) {
+    if (index < 0 || index >= this.size) {
+      throw new Error("Invalid index " + index + ". Timeline size is " + this.size);
+    }
+    var current = this.head;
+    for (var i = 0; i < index; i++) {
+      current = current.next;
+    }
+    var oldId = current.task.taskID;
+    current.task = task;
+    return "Replaced task " + oldId + " at index " + index + " with " + task.taskID + ".";
+  }
+
+  find(taskID) {
+    var current = this.head;
+    var iterations = 0;
+    while (current != null) {
+      iterations++;
+      if (current.task.taskID.toLowerCase() == taskID.toLowerCase()) {
+        return { task: current.task.clone(), iterations: iterations, found: true };
+      }
+      current = current.next;
+    }
+    return { task: null, iterations: iterations, found: false };
+  }
+
+  contains(taskID) {
+    var current = this.head;
+    while (current != null) {
+      if (current.task.taskID.toLowerCase() == taskID.toLowerCase()) {
+        return true;
+      }
+      current = current.next;
+    }
+    return false;
+  }
+
+  equals(other) {
+    if (this.size != other.size) return false;
+    var a = this.head;
+    var b = other.head;
+    while (a != null && b != null) {
+      if (!a.task.equals(b.task)) return false;
+      a = a.next;
+      b = b.next;
+    }
+    return true;
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  // helper so i can show the list on the page
+  toArray() {
+    var arr = [];
+    var current = this.head;
+    while (current != null) {
+      arr.push(current.task);
+      current = current.next;
+    }
+    return arr;
+  }
+
+  clear() {
+    this.head = null;
+    this.size = 0;
+  }
+}
+
+// manager class - handles active and completed lists
+class MissionControlManager {
+  constructor() {
+    this.activeTasks = [];
+    this.completedTasks = []; // most recent first
+  }
+
+  addMissionTask(task) {
+    // check for duplicates
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].taskID.toLowerCase() == task.taskID.toLowerCase()) {
+        throw new Error("Mission task [" + task.taskID + "] already exists. Duplicate entries are not allowed.");
+      }
+    }
+    this.activeTasks.push(task);
+    return "Mission task [" + task.taskID + "] successfully added to the active mission list.";
+  }
+
+  updateMissionTask(taskID, newName, newCategory, newPriority, newDate, newDuration, newSystems) {
+    var task = null;
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        task = this.activeTasks[i];
+        break;
+      }
+    }
+    if (task == null) {
+      return "Mission task [" + taskID + "] not found in active tasks.";
+    }
+
+    if (newName && newName.trim() != "") {
+      task.taskName = newName.trim();
+    }
+    if (newCategory && newCategory.trim() != "") {
+      task.category = newCategory.trim();
+    }
+    if (newPriority >= 1 && newPriority <= 10) {
+      task.priority = newPriority;
+    }
+    if (newDate && newDate.trim() != "") {
+      task.scheduledDate = newDate.trim();
+    }
+    if (newDuration > 0) {
+      task.estimatedDuration = newDuration;
+    }
+    if (newSystems != null && newSystems.length > 0) {
+      task.requiredSystems = [...newSystems];
+    }
+
+    return "Mission task [" + taskID + "] has been updated successfully.";
+  }
+
+  completeMissionTask(taskID) {
+    var idx = -1;
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx == -1) {
+      return "Mission task [" + taskID + "] not found in active tasks.";
+    }
+
+    var task = this.activeTasks[idx];
+    task.isCompleted = true;
+    this.activeTasks.splice(idx, 1);
+    // add to front so most recent is first
+    this.completedTasks.unshift(task);
+    return "Mission task [" + taskID + "] completed and moved to the mission history.";
+  }
+
+  deleteMissionTask(taskID) {
+    // check active first
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        this.activeTasks.splice(i, 1);
+        return "Mission task [" + taskID + "] removed from the active mission plan.";
+      }
+    }
+    // then completed
+    for (var i = 0; i < this.completedTasks.length; i++) {
+      if (this.completedTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        this.completedTasks.splice(i, 1);
+        return "Mission task [" + taskID + "] removed from the mission history.";
+      }
+    }
+    return "Mission task [" + taskID + "] not found in any list.";
+  }
+
+  findMissionTask(taskID) {
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        return { task: this.activeTasks[i], location: "active" };
+      }
+    }
+    for (var i = 0; i < this.completedTasks.length; i++) {
+      if (this.completedTasks[i].taskID.toLowerCase() == taskID.toLowerCase()) {
+        return { task: this.completedTasks[i], location: "completed" };
+      }
+    }
+    return null;
+  }
+
+  getCriticalTasks() {
+    var result = [];
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      if (this.activeTasks[i].isCritical()) {
+        result.push(this.activeTasks[i]);
+      }
+    }
+    return result;
+  }
+
+  getTopTasks(n) {
+    if (n == null) n = 3;
+    // copy and sort by priority high to low
+    var temp = this.activeTasks.slice();
+    temp.sort(function(a, b) {
+      return b.priority - a.priority;
+    });
+    return temp.slice(0, n);
+  }
+
+  getOverdueTasks() {
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var result = [];
+    for (var i = 0; i < this.activeTasks.length; i++) {
+      var t = this.activeTasks[i];
+      var d = new Date(t.scheduledDate);
+      if (d < today && !t.isCompleted) {
+        result.push(t);
+      }
+    }
+    return result;
+  }
+
+  cloneMissionTask(sourceID, newID) {
+    var found = this.findMissionTask(sourceID);
+    if (found == null) {
+      throw new Error("Mission task [" + sourceID + "] not found.");
+    }
+    var original = found.task;
+    var cloned = new MissionTask(
+      newID,
+      original.taskName,
+      original.category,
+      original.priority,
+      original.scheduledDate,
+      original.estimatedDuration,
+      false,
+      [...original.requiredSystems]
+    );
+    return this.addMissionTask(cloned);
+  }
+
+  generateSummary() {
+    var critical = this.getCriticalTasks().length;
+    var overdue = this.getOverdueTasks().length;
+    var avg = "N/A";
+    if (this.activeTasks.length > 0) {
+      var total = 0;
+      for (var i = 0; i < this.activeTasks.length; i++) {
+        total += this.activeTasks[i].estimatedDuration;
+      }
+      avg = (total / this.activeTasks.length).toFixed(1) + " minutes";
+    }
+
+    var highest = null;
+    if (this.activeTasks.length > 0) {
+      highest = this.activeTasks[0];
+      for (var i = 1; i < this.activeTasks.length; i++) {
+        if (this.activeTasks[i].priority > highest.priority) {
+          highest = this.activeTasks[i];
+        }
+      }
+    }
+
+    return {
+      active: this.activeTasks.length,
+      completed: this.completedTasks.length,
+      critical: critical,
+      overdue: overdue,
+      averageDuration: avg,
+      highestPriority: highest,
+      mostRecentCompleted: this.completedTasks.length > 0 ? this.completedTasks[0] : null
+    };
+  }
+}
+
+// create the main objects
+var manager = new MissionControlManager();
+var timeline = new MissionTimeline();
+
+// helper to escape html so it doesnt break
+function escapeHtml(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function showNotification(message, type) {
+  if (type == null) type = "success";
+  var area = document.getElementById("notification-area");
+  var title = "Success";
+  if (type == "error") title = "There is a problem";
+  if (type == "info") title = "Information";
+
+  if (type == "error") {
+    area.innerHTML =
+      '<div class="govuk-error-summary" data-module="govuk-error-summary" role="alert">' +
+      '<div role="alert">' +
+      '<h2 class="govuk-error-summary__title">' + title + '</h2>' +
+      '<div class="govuk-error-summary__body"><p>' + escapeHtml(message) + '</p></div>' +
+      '</div></div>';
+  } else {
+    var bannerClass = "govuk-notification-banner";
+    if (type == "success") bannerClass += " govuk-notification-banner--success";
+    area.innerHTML =
+      '<div class="' + bannerClass + '" role="region">' +
+      '<div class="govuk-notification-banner__header">' +
+      '<h2 class="govuk-notification-banner__title">' + title + '</h2>' +
+      '</div>' +
+      '<div class="govuk-notification-banner__content">' +
+      '<p class="govuk-notification-banner__heading">' + escapeHtml(message) + '</p>' +
+      '</div></div>';
+  }
+  // dont scroll the page
+  setTimeout(function() {
+    area.innerHTML = "";
+  }, 8000);
+}
+
+function renderTaskList(containerId, tasks, emptyMsg) {
+  var container = document.getElementById(containerId);
+  if (!tasks || tasks.length == 0) {
+    container.innerHTML = '<p class="govuk-body">' + escapeHtml(emptyMsg) + '</p>';
+    return;
+  }
+  var html = "";
+  for (var i = 0; i < tasks.length; i++) {
+    html += '<h3 class="govuk-heading-s">Task ' + (i + 1) + '</h3>';
+    html += tasks[i].toHTML();
+  }
+  container.innerHTML = html;
+}
+
+// ---- event handlers ----
+
+// 1. add
+document.getElementById("form-add").addEventListener("submit", function(e) {
+  e.preventDefault();
+  try {
+    var systemsRaw = document.getElementById("add-systems").value.trim();
+    var systems = [];
+    if (systemsRaw != "") {
+      var parts = systemsRaw.split(",");
+      for (var i = 0; i < parts.length; i++) {
+        var s = parts[i].trim();
+        if (s != "") systems.push(s);
+      }
+    }
+    var task = new MissionTask(
+      document.getElementById("add-taskID").value,
+      document.getElementById("add-taskName").value,
+      document.getElementById("add-category").value,
+      parseInt(document.getElementById("add-priority").value, 10),
+      document.getElementById("add-date").value,
+      parseInt(document.getElementById("add-duration").value, 10),
+      false,
+      systems
+    );
+    var msg = manager.addMissionTask(task);
+    showNotification(msg, "success");
+    this.reset();
+    refreshActive();
+  } catch (err) {
+    showNotification(err.message, "error");
+  }
+});
+
+// 2. update
+document.getElementById("form-update").addEventListener("submit", function(e) {
+  e.preventDefault();
+  try {
+    var id = document.getElementById("update-taskID").value.trim();
+    var systemsRaw = document.getElementById("update-systems").value.trim();
+    var systems = null;
+    if (systemsRaw != "") {
+      systems = [];
+      var parts = systemsRaw.split(",");
+      for (var i = 0; i < parts.length; i++) {
+        var s = parts[i].trim();
+        if (s != "") systems.push(s);
+      }
+    }
+    var priorityVal = document.getElementById("update-priority").value;
+    var durationVal = document.getElementById("update-duration").value;
+
+    var msg = manager.updateMissionTask(
+      id,
+      document.getElementById("update-taskName").value,
+      document.getElementById("update-category").value,
+      priorityVal ? parseInt(priorityVal, 10) : -1,
+      document.getElementById("update-date").value,
+      durationVal ? parseInt(durationVal, 10) : -1,
+      systems
+    );
+    if (msg.indexOf("not found") != -1) {
+      showNotification(msg, "error");
+    } else {
+      showNotification(msg, "success");
+    }
+    refreshActive();
+  } catch (err) {
+    showNotification(err.message, "error");
+  }
+});
+
+// 3. complete
+document.getElementById("form-complete").addEventListener("submit", function(e) {
+  e.preventDefault();
+  var id = document.getElementById("complete-taskID").value.trim();
+  var msg = manager.completeMissionTask(id);
+  if (msg.indexOf("not found") != -1) {
+    showNotification(msg, "error");
+  } else {
+    showNotification(msg, "success");
+  }
+  this.reset();
+  refreshActive();
+  refreshCompleted();
+});
+
+// 4. delete
+document.getElementById("form-delete").addEventListener("submit", function(e) {
+  e.preventDefault();
+  var id = document.getElementById("delete-taskID").value.trim();
+  var msg = manager.deleteMissionTask(id);
+  if (msg.indexOf("not found") != -1) {
+    showNotification(msg, "error");
+  } else {
+    showNotification(msg, "success");
+  }
+  this.reset();
+  refreshActive();
+  refreshCompleted();
+});
+
+function refreshActive() {
+  renderTaskList("active-tasks-container", manager.activeTasks, "No active mission tasks.");
+}
+function refreshCompleted() {
+  renderTaskList("completed-tasks-container", manager.completedTasks, "No completed mission tasks yet.");
+}
+
+document.getElementById("btn-refresh-active").addEventListener("click", refreshActive);
+document.getElementById("btn-refresh-completed").addEventListener("click", refreshCompleted);
+
+// 7 critical
+document.getElementById("btn-show-critical").addEventListener("click", function() {
+  var list = manager.getCriticalTasks();
+  renderTaskList("critical-tasks-container", list, "No critical mission tasks found.");
+  if (list.length > 0) {
+    showNotification("Found " + list.length + " critical task(s).", "info");
+  }
+});
+
+// 8 top 3
+document.getElementById("btn-show-top3").addEventListener("click", function() {
+  var list = manager.getTopTasks(3);
+  renderTaskList("top3-tasks-container", list, "No active mission tasks available.");
+});
+
+// 9 overdue
+document.getElementById("btn-show-overdue").addEventListener("click", function() {
+  var list = manager.getOverdueTasks();
+  var container = document.getElementById("overdue-tasks-container");
+  if (list.length == 0) {
+    container.innerHTML = '<p class="govuk-body">No overdue mission tasks found.</p>';
+  } else {
+    var html = '<p class="govuk-body">Today\'s date: ' + new Date().toISOString().slice(0, 10) + '</p>';
+    for (var i = 0; i < list.length; i++) {
+      html += list[i].toHTML();
+    }
+    html += '<p class="govuk-body govuk-!-font-weight-bold">Warning: ' + list.length + ' mission task(s) have passed their scheduled execution time.</p>';
+    container.innerHTML = html;
+  }
+});
+
+// 10 clone
+document.getElementById("form-clone").addEventListener("submit", function(e) {
+  e.preventDefault();
+  try {
+    var msg = manager.cloneMissionTask(
+      document.getElementById("clone-sourceID").value.trim(),
+      document.getElementById("clone-newID").value.trim()
+    );
+    showNotification(msg, "success");
+    this.reset();
+    refreshActive();
+  } catch (err) {
+    showNotification(err.message, "error");
+  }
+});
+
+// 11 search
+document.getElementById("form-search").addEventListener("submit", function(e) {
+  e.preventDefault();
+  var id = document.getElementById("search-taskID").value.trim();
+  var result = manager.findMissionTask(id);
+  var container = document.getElementById("search-result-container");
+  if (result != null) {
+    container.innerHTML =
+      '<div class="govuk-inset-text">Found in <strong>' + result.location + '</strong> tasks.</div>' +
+      result.task.toHTML();
+    showNotification("Mission task [" + id + "] found in " + result.location + " tasks.", "success");
+  } else {
+    container.innerHTML = "";
+    showNotification("Mission task [" + id + "] not found.", "error");
+  }
+});
+
+// 12 summary
+document.getElementById("btn-summary").addEventListener("click", function() {
+  var s = manager.generateSummary();
+  var html =
+    '<div class="govuk-summary-card">' +
+    '<div class="govuk-summary-card__title-wrapper">' +
+    '<h2 class="govuk-summary-card__title">Artemis Mission Summary</h2>' +
+    '</div>' +
+    '<div class="govuk-summary-card__content">' +
+    '<dl class="govuk-summary-list">' +
+    '<div class="govuk-summary-list__row">' +
+    '<dt class="govuk-summary-list__key">Active Mission Tasks</dt>' +
+    '<dd class="govuk-summary-list__value">' + s.active + '</dd></div>' +
+    '<div class="govuk-summary-list__row">' +
+    '<dt class="govuk-summary-list__key">Completed Mission Tasks</dt>' +
+    '<dd class="govuk-summary-list__value">' + s.completed + '</dd></div>' +
+    '<div class="govuk-summary-list__row">' +
+    '<dt class="govuk-summary-list__key">Critical Active Tasks</dt>' +
+    '<dd class="govuk-summary-list__value">' + s.critical + '</dd></div>' +
+    '<div class="govuk-summary-list__row">' +
+    '<dt class="govuk-summary-list__key">Overdue Tasks</dt>' +
+    '<dd class="govuk-summary-list__value">' + s.overdue + '</dd></div>' +
+    '<div class="govuk-summary-list__row">' +
+    '<dt class="govuk-summary-list__key">Average Estimated Duration</dt>' +
+    '<dd class="govuk-summary-list__value">' + s.averageDuration + '</dd></div>';
+
+  if (s.highestPriority != null) {
+    html +=
+      '<div class="govuk-summary-list__row">' +
+      '<dt class="govuk-summary-list__key">Highest Priority Operation</dt>' +
+      '<dd class="govuk-summary-list__value">' + escapeHtml(s.highestPriority.taskID) +
+      ' – ' + escapeHtml(s.highestPriority.taskName) + '</dd></div>';
+  }
+  if (s.mostRecentCompleted != null) {
+    html +=
+      '<div class="govuk-summary-list__row">' +
+      '<dt class="govuk-summary-list__key">Most Recently Completed</dt>' +
+      '<dd class="govuk-summary-list__value">' + escapeHtml(s.mostRecentCompleted.taskID) +
+      ' – ' + escapeHtml(s.mostRecentCompleted.taskName) + '</dd></div>';
+  }
+
+  html += '</dl></div></div>';
+  html += '<p class="govuk-body">Mission summary successfully generated.</p>';
+  document.getElementById("summary-container").innerHTML = html;
+});
+
+// 13 timeline demo
+document.getElementById("btn-timeline-demo").addEventListener("click", function() {
+  var log = document.getElementById("timeline-log");
+  var display = document.getElementById("timeline-display");
+  log.innerHTML = "";
+  timeline.clear();
+
+  function logMsg(msg) {
+    log.innerHTML += '<p class="govuk-body">' + escapeHtml(msg) + '</p>';
+  }
+
+  try {
+    var systems1 = ["Navigation Computer", "Orion Guidance System"];
+    var systems2 = ["Deep Space Antenna"];
+    var systems3 = ["Camera Array", "Spectrometer"];
+    var systems4 = ["Radiation Sensor"];
+
+    var task1 = new MissionTask("NAV-101", "Lunar Navigation Correction", "NAVIGATION", 9, "2027-05-15", 45, false, systems1);
+    var task2 = new MissionTask("COM-102", "Deep Space Communication", "COMMUNICATION", 8, "2027-05-16", 30, false, systems2);
+    var task3 = new MissionTask("SCI-103", "Lunar Surface Photography", "SCIENCE", 5, "2027-05-17", 60, false, systems3);
+    var task4 = new MissionTask("RAD-104", "Radiation Measurement", "SCIENCE", 6, "2027-05-18", 90, false, systems4);
+
+    logMsg("--- Testing addToStart() ---");
+    logMsg(timeline.addToStart(task2));
+    logMsg(timeline.addToStart(task1));
+
+    logMsg("--- Testing insertAtIndex() ---");
+    logMsg(timeline.insertAtIndex(task3, 1));
+
+    logMsg("--- Testing displayTimeline() ---");
+    renderTimeline();
+
+    logMsg("--- Testing contains() ---");
+    logMsg("Contains NAV-101: " + timeline.contains("NAV-101"));
+    logMsg("Contains XYZ-999: " + timeline.contains("XYZ-999"));
+
+    logMsg("--- Testing find() ---");
+    var found = timeline.find("COM-102");
+    if (found.found) {
+      logMsg("Mission task COM-102 found after " + found.iterations + " iterations");
+    }
+
+    logMsg("--- Testing replaceAtIndex() ---");
+    logMsg(timeline.replaceAtIndex(task4, 1));
+    renderTimeline();
+
+    logMsg("--- Testing deleteFromIndex() ---");
+    logMsg(timeline.deleteFromIndex(0));
+    renderTimeline();
+
+    logMsg("--- Testing equals() ---");
+    var timeline2 = new MissionTimeline();
+    timeline2.addToStart(task2);
+    logMsg("Are timelines equal: " + timeline.equals(timeline2));
+
+    logMsg("--- Testing getSize() ---");
+    logMsg("Timeline size: " + timeline.getSize());
+
+    logMsg("--- Testing deleteFromStart() ---");
+    logMsg(timeline.deleteFromStart());
+    renderTimeline();
+
+    logMsg("========= TIMELINE TEST COMPLETE =========");
+    showNotification("Timeline demonstration completed successfully.", "success");
+  } catch (err) {
+    logMsg("Error: " + err.message);
+    showNotification(err.message, "error");
+  }
+
+  function renderTimeline() {
+    var tasks = timeline.toArray();
+    if (tasks.length == 0) {
+      display.innerHTML = '<p class="govuk-body">Timeline is empty</p>';
+      return;
+    }
+    var html = '<h3 class="govuk-heading-m">Current Timeline</h3>';
+    for (var i = 0; i < tasks.length; i++) {
+      html += '<div class="timeline-node"><strong>Position ' + i + '</strong>' + tasks[i].toHTML() + '</div>';
+    }
+    html += '<p class="govuk-body">Total tasks in timeline: ' + timeline.getSize() + '</p>';
+    display.innerHTML = html;
+  }
+});
+
+document.getElementById("btn-timeline-clear").addEventListener("click", function() {
+  timeline.clear();
+  document.getElementById("timeline-log").innerHTML = "";
+  document.getElementById("timeline-display").innerHTML = '<p class="govuk-body">Timeline is empty</p>';
+  showNotification("Timeline cleared.", "info");
+});
+
+// show empty lists at start
+refreshActive();
+refreshCompleted();
+</script>
+</body>
+</html>
