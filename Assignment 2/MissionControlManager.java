@@ -32,7 +32,6 @@ public class MissionControlManager {
 
     // 1. addMissionTask
     // This will adds a new task to activeTasks and validate by checking for duplicates
-    // Throws DuplicateMissionTaskException if task already exists.
 
     public void addMissionTask(MissionTask task)
     throws DuplicateMissionTaskException {
@@ -314,7 +313,7 @@ public class MissionControlManager {
         {
             if (task.getTaskID().equalsIgnoreCase(taskID)) 
             {
-                System.out.println("Mission task: " + taskID + " found in active tasks.");
+                System.out.println("Mission task: " + taskID + " found in active tasks");
                 return task;
             }
         }
@@ -323,12 +322,12 @@ public class MissionControlManager {
         {
             if (task.getTaskID().equalsIgnoreCase(taskID)) 
             {
-                System.out.println("Mission task " + taskID +" found in completed tasks.");
+                System.out.println("Mission task " + taskID +" found in completed tasks");
                 return task;
             }
         }
 
-        System.out.println("Mission task " + taskID + " not found.");
+        System.out.println("Mission task " + taskID + " not found");
         return null;
     }
 

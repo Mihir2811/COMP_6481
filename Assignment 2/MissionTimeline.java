@@ -5,6 +5,7 @@
 /*
  * MissionTimeline is a linked list that stores MissionTask objects in a chain of nodes.
  * Each node will hold one task and a reference to the next node.
+ * I have not used java in-built LinkedList to implement the storage of MissionTask and has used the manual manner to assign LinkedList
  */
 
 import java.util.NoSuchElementException;
@@ -84,8 +85,6 @@ public class MissionTimeline {
         }
 
     } 
-    
-    // end of inner class
 
 
     // MissionTimeline attributes
@@ -158,7 +157,7 @@ public class MissionTimeline {
             return;
         }
 
-        System.out.println("Removing task " + head.getTask().getTaskID() + " from the start of the timeline.");
+        System.out.println("Removing task " + head.getTask().getTaskID() + " from the start of the timeline");
 
         head = head.getNext();
         size = size - 1;
@@ -188,8 +187,8 @@ public class MissionTimeline {
         }
 
         // skiping over the node to delete
-        // before: current to target to next
-        // after:  current to next
+        // before current to target to next
+        // after current to next
 
         System.out.println("Removing task " + current.getNext().getTask().getTaskID() + " from index " + index);
 
@@ -219,7 +218,6 @@ public class MissionTimeline {
         current.setTask(task);
     }
     
-
 
     /*
      * This method Searches for a mission task by its ID

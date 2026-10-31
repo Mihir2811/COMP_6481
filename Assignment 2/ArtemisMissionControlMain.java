@@ -148,8 +148,7 @@ public class ArtemisMissionControlMain {
             } 
             
             else if (choice == 14) {
-                System.out.println("\nThank you for using the Artemis Mission Control System.");
-                System.out.println("Safe travels and successful missions!");
+                System.out.println("..·´¯`·...·´¯`·...·´¯`·. Thank you for using the Artemis Mission Control System ..·´¯`·...·´¯`·...·´¯`·.");
             }
         }
 

@@ -2,12 +2,6 @@
 
 // Written by: Mihir Vipulbhai Panchal (ID:40366948)
 
-/*
- * MissionCritical is an interface 
- * It would define the contract for answering whether a mission task requires immediate attention or not.
- * Any class that implementing this interface must provide the logic for the isCritical() method.
- */
-
 public interface MissionCritical {
 
     /*

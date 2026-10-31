@@ -12,10 +12,10 @@ public class InvalidMissionTaskException extends Exception {
     // The default constructor
     public InvalidMissionTaskException() 
     {
-        super("Error: Invalid or missing mission task information.");
+        super("Error: Invalid or missing mission task information");
     }
 
-    // This would be the Parameterized constructor
+    // This is the Parameterized constructor
     public InvalidMissionTaskException(String message) 
     {
         super(message);

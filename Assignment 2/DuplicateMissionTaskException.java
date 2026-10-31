@@ -12,7 +12,7 @@ public class DuplicateMissionTaskException extends Exception {
     // The default constructor
     public DuplicateMissionTaskException() 
     {
-        super("Error: Mission task already exists in the mission plan.");
+        super("Error: Mission task already exists in the mission plan");
     }
 
     // This would be the Parameterized constructor
