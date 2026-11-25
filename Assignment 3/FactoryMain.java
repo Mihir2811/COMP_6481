@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * FactoryMain is the main driver class for the Smart Factory
- * Assembly Manager. It builds the hard-coded assembly tree,
- * initializes the inventory, and provides a menu-driven
- * console interface for all factory operations.
+ * FactoryMain is the main driver class 
+ * This class builds the tree assembly, inventory and provides console menu interface for all operations. 
  *
- * Assembly Tree:
+ * Tree: (To build an electric scooter what we actually need)
  * Electric Scooter [SCOOTER]
  *   Motor Assembly [MOTOR] x1
  *     Rotor [ROTOR] x1
@@ -20,18 +18,19 @@ import java.util.Scanner;
  *     Battery Controller [CONTROLLER] x1
  *   Frame [FRAME] x1
  *
- * Initial Inventory:
+ * Starting Inventory:
  * ROTOR=2, STATOR=4, CELL=10, CONTROLLER=2, FRAME=2
  *
  * @author MIHIR VIPULBHAI PANCHAL
  */
+
 public class FactoryMain 
 {
     static Scanner scanner = new Scanner(System.in);
 
     /**
-     * Main entry point. Builds the assembly tree, initializes
-     * inventory, and runs the main menu loop until user exits.
+     * Main entry point
+     * Builds the tree, initializes inventory, and runs the main menu loop until user exits
      *
      * @param args command line arguments (not used)
      */
@@ -40,9 +39,37 @@ public class FactoryMain
 
         System.out.println("Welcome to Smart Factory Assembly Manager");
 
-        // -------------------------------------------------------
-        // Build the hard-coded assembly tree
-        // -------------------------------------------------------
+//                                                /\      /\
+//                                                ||______||
+//                                                || ^  ^ ||
+//                                                \| |  | |/
+//                                                 |______|
+//               __                                |  __  |
+//              /  \       ________________________|_/  \_|__
+//             / ^^ \     /=========================/ ^^ \===|
+//            /  []  \   /=========================/  []  \==|
+//           /________\ /=========================/________\=|
+//        *  |        |/==========================|        |=|
+//       *** | ^^  ^^ |---------------------------| ^^  ^^ |--
+//      *****| []  [] |           _____           | []  [] | |
+//     *******        |          /_____\          |      * | |
+//    *********^^  ^^ |  ^^  ^^  |  |  |  ^^  ^^  |     ***| |
+//   ***********]  [] |  []  []  |  |  |  []  []  | ===***** |
+//  *************     |         @|__|__|@         |/ |*******|
+// ***************   ***********--=====--**********| *********
+// ***************___*********** |=====| **********|***********
+//  *************     ********* /=======\ ******** | *********
+
+        System.out.println(
+        "         _\n" +
+        "       D/_\n" +
+        "       /(_`._,-.\n" +
+        "_____(o) `--'(o)______"
+        );
+
+        System.out.println();
+
+        // Build the assembly tree
 
         // root - finished product
         ComponentNode scooter = new ComponentNode("SCOOTER", "Electric Scooter", 1);
@@ -77,9 +104,8 @@ public class FactoryMain
 
         ProductTree productTree = new ProductTree(scooter);
 
-        // -------------------------------------------------------
-        // Initialize inventory with hard-coded starting quantities
-        // -------------------------------------------------------
+
+        // Initialize inventory with starting quantities
 
         HashMap<String, Integer> inventory = new HashMap<>();
 
@@ -94,9 +120,9 @@ public class FactoryMain
         System.out.println("Product loaded: Electric Scooter");
         System.out.println("Factory inventory initialized successfully.");
 
-        // -------------------------------------------------------
+
         // Main menu loop
-        // -------------------------------------------------------
+        // ---------------------
 
         int choice = 0;
 
@@ -165,8 +191,8 @@ public class FactoryMain
     }
 
     /**
-     * Displays the main menu and returns a valid choice
-     * between 1 and 8. Loops until valid input is entered.
+     * Displays the main menu and returns a valid choice between 1 and 8
+     * Loops until valid input is entered
      *
      * @return validated menu choice
      */
@@ -181,6 +207,7 @@ public class FactoryMain
             System.out.println("\n=====================================");
             System.out.println("  SMART FACTORY ASSEMBLY MANAGER");
             System.out.println("=====================================");
+            System.out.println();
             System.out.println("1. View Product Assembly Tree");
             System.out.println("2. Add Raw Material Stock");
             System.out.println("3. Check Manufacturing Feasibility");
@@ -189,6 +216,7 @@ public class FactoryMain
             System.out.println("6. View Missing Materials");
             System.out.println("7. Production Summary");
             System.out.println("8. Exit");
+            System.out.println();
             System.out.println("=====================================");
             System.out.print("Enter your choice: ");
 
@@ -204,7 +232,7 @@ public class FactoryMain
             
             catch (NumberFormatException e) 
             {
-                System.out.println("Invalid input. Please enter a number");
+                System.out.println("Invalid input Please enter a number");
             }
         }
 
@@ -212,10 +240,9 @@ public class FactoryMain
     }
 
     /**
-     * Handles Option 2 - Add Raw Material Stock.
-     * Prompts for material ID and quantity, validates input,
-     * and calls addStock on the manager.
-     * Accepts lowercase or uppercase material IDs.
+     * Handles Option 2 - Add Raw Material Stock
+     * Prompts for material ID and quantity, validates input, and calls addStock on the manager
+     * Accepts lowercase or uppercase material IDs also!!
      *
      * @param manager the FactoryManager instance
      */
@@ -254,10 +281,10 @@ public class FactoryMain
     }
 
     /**
-     * Handles Option 3 - Check Manufacturing Feasibility.
-     * Prompts for quantity and checks if manufacturing is possible.
+     * Handles Option 3 - Check Manufacturing Feasibility
+     * 
+     * Prompts for quantity and checks if manufacturing is possible
      * Displays missing materials if not feasible.
-     * Inventory is NOT modified by this operation.
      *
      * @param manager the FactoryManager instance
      */
@@ -298,23 +325,23 @@ public class FactoryMain
     }
 
     /**
-     * Handles Option 4 - Manufacture Electric Scooter.
-     * Prompts for quantity, attempts manufacturing.
-     * On success, inventory is updated and totals are increased.
-     * On failure, displays error and missing materials.
-     * Inventory remains completely unchanged on failure.
+     * Handles Option 4 - Manufacture Electric Scooter
+     * Prompts for quantity, attempts manufacturing
+     * On success, inventory is updated and totals are increased
+     * On failure, displays error and missing materials
+     * Inventory remains completely unchanged on failure
      *
      * @param manager the FactoryManager instance
      */
 
     public static void handleManufacture(FactoryManager manager) 
     {
-        // declare outside try so accessible in catch block
         int quantity = 0;
 
         try 
         {
             System.out.print("Enter number of scooters: ");
+
             quantity = Integer.parseInt(scanner.nextLine().trim());
 
             if (quantity <= 0) 
@@ -349,9 +376,9 @@ public class FactoryMain
     }
 
     /**
-     * Handles Option 6 - View Missing Materials.
-     * Prompts for a quantity and displays which materials are
-     * insufficient and by how much.
+     * Handles Option 6 - View Missing Materials
+     * 
+     * Prompts for a quantity and displays which materials are insufficient and by how much.
      *
      * @param manager the FactoryManager instance
      */
